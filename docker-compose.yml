@@ -5,7 +5,8 @@ version: '3.1'
 services:
 
   redmine:
-    image: redmine:3.4.8
+    build:
+      context: ./redmine
     restart: always
     ports:
       - 8080:3000
@@ -13,8 +14,9 @@ services:
       REDMINE_DB_MYSQL: db
       REDMINE_DB_PASSWORD: example
     volumes:
-      - ./redmine/files:/usr/src/redmine/files
-      - ./redmine/plugins:/usr/src/redmine/plugins
+      - ./redmine/data/files:/usr/src/redmine/files
+      - ./redmine/data/plugins:/usr/src/redmine/plugins
+      - ./redmine/data/log:/usr/src/redmine/log
     depends_on:
       - db
 
@@ -25,5 +27,5 @@ services:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: redmine
     volumes:
-      - ./mariadb:/var/lib/mysql
+      - ./mariadb/data:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
